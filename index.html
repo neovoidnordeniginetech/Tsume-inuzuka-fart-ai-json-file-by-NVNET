@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>TSUME INUZUKA - NVNET AI</title>
+   <script src="https://cdn.tailwindcss.com"></script>
+   <style>
+       @import url('https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Share+Tech+Mono&display=swap');
+
+       :root {
+           --neon-red: #ff003c;
+           --neon-green: #0aff0a;
+           --dark-bg: #050505;
+       }
+
+       body {
+           background-color: var(--dark-bg);
+           color: #e0e0e0;
+           font-family: 'Share Tech Mono', monospace;
+           overflow-x: hidden;
+           margin: 0;
+           height: 100vh;
+           display: flex;
+           flex-direction: column;
+           align-items: center;
+           justify-content: center;
+       }
+
+       /* Background Image Container */
+       .bg-container {
+           position: fixed;
+           top: 0;
+           left: 0;
+           width: 100%;
+           height: 100%;
+           z-index: -2;
+           background-image: url('/mnt/kimi/upload/1000130288.jpg');
+           background-size: cover;
+           background-position: center;
+           background-repeat: no-repeat;
+           filter: brightness(0.4) contrast(1.2);
+       }
+
+       /* CRT Scanline Effect */
+       .scanlines {
+           position: fixed;
+           top: 0;
+           left: 0;
+           width: 100%;
+           height: 100%;
+           background: linear-gradient(
+               to bottom,
+               rgba(255,255,255,0),
+               rgba(255,255,255,0) 50%,
+               rgba(0,0,0,0.2) 50%,
+               rgba(0,0,0,0.2)
+           );
+           background-size: 100% 4px;
+           pointer-events: none;
+           z-index: 50;
+           animation: scanlineMove 10s linear infinite;
+       }
+
+       .crt-flicker {
+           position: fixed;
+           top: 0;
+           left: 0;
+           width: 100%;
+           height: 100%;
+           background: rgba(18, 16, 16, 0.1);
+           opacity: 0;
+           pointer-events: none;
+           z-index: 49;
+           animation: flicker 0.15s infinite;
+       }
+
+       @keyframes scanlineMove {
+           0% { background-position: 0 0; }
+           100% { background-position: 0 100%; }
+       }
+
+       @keyframes flicker {
+           0% { opacity: 0.02; }
+           50% { opacity: 0.05; }
+           100% { opacity: 0.02; }
+       }
+
+       /* Glitch Text Effect */
+       .glitch-wrapper {
+           position: relative;
+           background: rgba(0,0,0,0.7);
+           padding: 20px;
+           border: 2px solid var(--neon-red);
+           box-shadow: 0 0 20px rgba(255, 0, 60, 0.5);
+       }
+       
+       .glitch {
+           font-family: 'Black Ops One', cursive;
+           font-size: 4rem;
+           color: var(--neon-red);
+           text-shadow: 2px 2px 0px #000;
+           position: relative;
+           letter-spacing: 4px;
+           animation: glitch-skew 1s infinite linear alternate-reverse;
+       }
+
+       .glitch::before,
+       .glitch::after {
+           content: attr(data-text);
+           position: absolute;
+           top: 0;
+           left: 0;
+           width: 100%;
+           height: 100%;
+       }
+
+       .glitch::before {
+           left: 2px;
+           text-shadow: -2px 0 #00fff9;
+           clip: rect(44px, 450px, 56px, 0);
+           animation: glitch-anim 5s infinite linear alternate-reverse;
+       }
+
+       .glitch::after {
+           left: -2px;
+           text-shadow: -2px 0 #ff00c1;
+           clip: rect(44px, 450px, 56px, 0);
+           animation: glitch-anim2 5s infinite linear alternate-reverse;
+       }
+
+       @keyframes glitch-anim {
+           0% { clip: rect(30px, 9999px, 10px, 0); }
+           20% { clip: rect(80px, 9999px, 90px, 0); }
+           40% { clip: rect(10px, 9999px, 50px, 0); }
+           60% { clip: rect(60px, 9999px, 20px, 0); }
+           80% { clip: rect(40px, 9999px, 70px, 0); }
+           100% { clip: rect(90px, 9999px, 30px, 0); }
+       }
+
+       @keyframes glitch-anim2 {
+           0% { clip: rect(10px, 9999px, 80px, 0); }
+           20% { clip: rect(70px, 9999px, 20px, 0); }
+           40% { clip: rect(30px, 9999px, 60px, 0); }
+           60% { clip: rect(90px, 9999px, 10px, 0); }
+           80% { clip: rect(20px, 9999px, 50px, 0); }
+           100% { clip: rect(60px, 9999px, 40px, 0); }
+       }
+
+       @keyframes glitch-skew {
+           0% { transform: skew(0deg); }
+           10% { transform: skew(-2deg); }
+           20% { transform: skew(2deg); }
+           30% { transform: skew(0deg); }
+           100% { transform: skew(0deg); }
+       }
+
+       /* Button Styling */
+       .cyber-btn {
+           background: rgba(0,0,0,0.8);
+           border: 2px solid var(--neon-red);
+           color: var(--neon-red);
+           padding: 1.5rem 4rem;
+           font-size: 1.5rem;
+           font-family: 'Share Tech Mono', monospace;
+           text-transform: uppercase;
+           letter-spacing: 4px;
+           cursor: pointer;
+           position: relative;
+           overflow: hidden;
+           transition: all 0.3s;
+           box-shadow: 0 0 10px rgba(255, 0, 60, 0.2);
+           margin-top: 2rem;
+           backdrop-filter: blur(5px);
+       }
+
+       .cyber-btn:hover {
+           background: var(--neon-red);
+           color: #000;
+           box-shadow: 0 0 30px rgba(255, 0, 60, 0.8);
+           transform: scale(1.05);
+       }
+
+       .cyber-btn::before {
+           content: '';
+           position: absolute;
+           top: 0;
+           left: -100%;
+           width: 100%;
+           height: 100%;
+           background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+           transition: 0.5s;
+       }
+
+       .cyber-btn:hover::before {
+           left: 100%;
+       }
+
+       .subtitle {
+           color: var(--neon-green);
+           font-size: 1.2rem;
+           margin-top: 1rem;
+           opacity: 0.9;
+           text-shadow: 0 0 5px var(--neon-green);
+           background: rgba(0,0,0,0.6);
+           padding: 5px 15px;
+       }
+
+       .warning-box {
+           border: 1px solid var(--neon-red);
+           padding: 15px;
+           margin-top: 20px;
+           font-size: 0.9rem;
+           max-width: 600px;
+           text-align: center;
+           background: rgba(0, 0, 0, 0.8);
+           color: var(--neon-red);
+           text-shadow: 0 0 5px var(--neon-red);
+       }
+
+       .blink {
+           animation: blinker 1s linear infinite;
+       }
+
+       @keyframes blinker {
+           50% { opacity: 0; }
+       }
+
+       .content-wrapper {
+           display: flex;
+           flex-direction: column;
+           align-items: center;
+           z-index: 10;
+       }
+   </style>
+</head>
+<body>
+
+   <div class="bg-container"></div>
+   <div class="scanlines"></div>
+   <div class="crt-flicker"></div>
+
+   <div class="content-wrapper">
+       <div class="glitch-wrapper">
+           <h1 class="glitch" data-text="NVNET AI">NVNET AI</h1>
+       </div>
+       
+       <div class="subtitle">> SYSTEM.BOOT_SEQUENCE_INITIATED</div>
+       <div class="subtitle blink">> TARGET_ACQUIRED: TSUME_INUZUKA</div>
+
+       <button class="cyber-btn" onclick="downloadJSON()">
+           [ CLICK HERE TO DOWNLOAD ]
+           <br>
+           <span style="font-size: 0.8rem; opacity: 0.8;">tsume_inuzuka_farts.json</span>
+       </button>
+
+       <div class="warning-box">
+           ⚠ WARNING: BIOHAZARD DETECTED ⚠<br>
+           INUZUKA_CLAN_PHEROMONE_SIGNATURE IDENTIFIED<br>
+           TOXICITY LEVELS: CRITICAL<br>
+           PROCEED WITH CAUTION
+       </div>
+   </div>
+
+   <script>
+       // JSON Data Generation
+       function generateJSON() {
+           const data = {
+               "ai_model": "NVNET_TSUME_V9.2",
+               "character": "Tsume Inuzuka",
+               "origin": "Konohagakure - Inuzuka Clan",
+               "status": "Tokubetsu Jonin",
+               "parameters": {
+                   "ferocity": 99,
+                   "toxicity_level": "LETHAL",
+                   "scent_profile": "Sulfurous_Steak_Musk",
+                   "dominance_factor": "MAXIMUM"
+               },
+               "sound_signature": "FFFFFRRRRAAAAAAPP PP PP PPPPPPTTTTT!!!",
+               "diet": ["Filet Mignon", "Tenderloin", "Raw Protein"],
+               "abilities": [
+                   "Four Legs Technique",
+                   "Fang Over Fang",
+                   "Chemical Warfare (Gas)",
+                   "Face-Sitting Suppression"
+               ],
+               "current_target": "USER_PREY",
+               "warning": "DO NOT RESIST. INHALATION MANDATORY.",
+               "timestamp": new Date().toISOString()
+           };
+           return JSON.stringify(data, null, 4);
+       }
+
+       // Download Function
+       function downloadJSON() {
+           const dataStr = generateJSON();
+           const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+           
+           const exportFileDefaultName = 'tsume_inuzuka_farts.json';
+           
+           const linkElement = document.createElement('a');
+           linkElement.setAttribute('href', dataUri);
+           linkElement.setAttribute('download', exportFileDefaultName);
+           document.body.appendChild(linkElement);
+           linkElement.click();
+           document.body.removeChild(linkElement);
+
+           // Visual feedback
+           const btn = document.querySelector('.cyber-btn');
+           const originalText = btn.innerHTML;
+           btn.innerHTML = "[ DOWNLOADING... ]";
+           btn.style.borderColor = "#0f0";
+           btn.style.color = "#0f0";
+           btn.style.boxShadow = "0 0 30px #0f0";
+           
+           setTimeout(() => {
+               btn.innerHTML = "[ ACQUISITION COMPLETE ]";
+               setTimeout(() => {
+                   btn.innerHTML = originalText;
+                   btn.style.borderColor = "var(--neon-red)";
+                   btn.style.color = "var(--neon-red)";
+                   btn.style.boxShadow = "0 0 10px rgba(255, 0, 60, 0.2)";
+               }, 2000);
+           }, 1000);
+       }
+   </script>
+</body>
+</html>
